@@ -1,8 +1,5 @@
 package com.example.arne.translogistics_device.DAL;
 
-/**
- * Created by Arne on 11-03-2018.
- */
 
 import android.arch.persistence.room.TypeConverter;
 

@@ -26,6 +26,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    
 
     //Lottie Animation
     compile 'com.airbnb.android:lottie:2.5.0-rc1'
