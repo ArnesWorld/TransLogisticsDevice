@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ScanPackageActivity" />
+        <activity android:name=".DisplayPackageDataActivity" />
+        <activity android:name=".RecordDataActivity" />
+        <activity android:name=".DisplayRecordingsActivity" />
+        <activity android:name=".DisplayDataActivity" />
+        <activity android:name=".SendDataActivity"></activity>
     </application>
 
 </manifest>
