@@ -26,11 +26,15 @@ public interface DataSegmentDAO{
     @Query("SELECT * FROM DataSegment WHERE id = :id")
     DataSegment getDataSegmentById(int id);
 
+    @Query("SELECT * FROM DataSegment WHERE data_recording_id = :id")
+    List<DataSegment> getDataSegmentByRecId(int id);
+
     @Insert(onConflict = IGNORE)
     void insertDataSegment(DataSegment dataSegment);
 
     @Query("DELETE FROM DataSegment")
     void deleteAll();
+
 
 
 }

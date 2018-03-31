@@ -2,16 +2,21 @@ package com.example.arne.translogistics_device.Model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
 import com.example.arne.translogistics_device.DAL.DateConverter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @TypeConverters(DateConverter.class)
-public class DataRecording {
+public class DataRecording implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -26,10 +31,12 @@ public class DataRecording {
     @ColumnInfo(name = "package_id")
     private int packageId;
 
+    @Ignore
+    public Package pack;
+
     public DataRecording(){}
 
-    public DataRecording(int id, int recordingIntervals, int maxShockLimit, Date startTime, Date endTime, int packageId) {
-        this.id = id;
+    public DataRecording(int recordingIntervals, int maxShockLimit, Date startTime, Date endTime, int packageId) {
         this.recordingIntervals = recordingIntervals;
         this.maxShockLimit = maxShockLimit;
         this.startTime = startTime;
@@ -83,5 +90,12 @@ public class DataRecording {
 
     public void setPackageId(int packageId) {
         this.packageId = packageId;
+    }
+
+    public byte[] serialize() throws IOException {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        ObjectOutputStream o = new ObjectOutputStream(b);
+        o.writeObject(this);
+        return b.toByteArray();
     }
 }
