@@ -2,6 +2,7 @@ package com.example.arne.translogistics_device;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -27,11 +28,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.arne.translogistics_device.Model.DataRecording;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,11 +47,11 @@ public class SendDataActivity extends AppCompatActivity{
     private static final int LOCATION_REQUEST_CODE = 50;
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    private BluetoothAdapter bluetoothAdapter;
+    public BluetoothAdapter bluetoothAdapter;
     private MyDeviceAdapter adapter;
     private HashMap<String, BluetoothDevice> bluetoothDeviceHashMap;
     private Handler mHandler;
-    public Set<BluetoothDevice> pairedDevices;
+    public Set<BluetoothDevice> pairedDevices = new HashSet<>();
 
     private BluetoothServerSocket serverSocket;
     private BluetoothSocket socket;
@@ -59,6 +63,7 @@ public class SendDataActivity extends AppCompatActivity{
 
 
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +101,7 @@ public class SendDataActivity extends AppCompatActivity{
                        // txtDisplayMsg.setText(readMessage);
                         break;
                     case MessageConstants.MESSAGE_WRITE:
+                        Toast.makeText(getApplicationContext(), "Data sent succesfully", Toast.LENGTH_SHORT).show();
                         break;
                     case MessageConstants.MESSAGE_CONNECTSUCCES:
                         TextView txtDeviceName = findViewById(R.id.txtDeviceName);
@@ -142,17 +148,30 @@ public class SendDataActivity extends AppCompatActivity{
         }
     }
 
-    public void sendData(){
-        if(comThread != null){
+    public void sendData(BluetoothDevice device){
+
+        if(comThread == null){
             try {
-                byte[] objBytes = dataRecording.serialize();
-                comThread.write(objBytes);
-            } catch (IOException e) {
-                e.printStackTrace();
+                BluetoothDevice realDevice = bluetoothAdapter.getRemoteDevice(device.getAddress());
+                BluetoothSocket socket = realDevice.createRfcommSocketToServiceRecord(uuid);
+                bluetoothAdapter.cancelDiscovery();
+                socket.connect();
+                comThread = new ConnectedThread(socket);
+                comThread.start();
+            } catch (Exception e) {
+
             }
 
-
         }
+        try {
+            Gson gson = new Gson();
+            String json = gson.toJson(dataRecording);
+            byte[] objBytes = json.getBytes();
+            comThread.write(objBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void findBlueToothDevices() {
@@ -304,7 +323,7 @@ public class SendDataActivity extends AppCompatActivity{
 
         public void run() {
             // Cancel discovery because it otherwise slows down the connection.
-            // bluetoothAdapter.cancelDiscovery();
+             bluetoothAdapter.cancelDiscovery();
 
             try {
                 // Connect to the remote device through the socket. This call blocks
@@ -366,12 +385,12 @@ public class SendDataActivity extends AppCompatActivity{
             try {
                 tmpIn = socket.getInputStream();
             } catch (IOException e) {
-                Log.e(TAG, "Error occurred when creating input stream", e);
+                Log.d(TAG, "Error occurred when creating input stream", e);
             }
             try {
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "Error occurred when creating output stream", e);
+                Log.d(TAG, "Error occurred when creating output stream", e);
             }
 
             mmInStream = tmpIn;
@@ -402,7 +421,9 @@ public class SendDataActivity extends AppCompatActivity{
         // Call this from the main activity to send data to the remote device.
         public void write(byte[] bytes) {
             try {
-                mmOutStream.write(bytes);
+               // DataRecording dr = new DataRecording();
+                 mmOutStream.write(bytes);
+
 
                 // Share the sent message with the UI activity.
                 Message writtenMsg = mHandler.obtainMessage(

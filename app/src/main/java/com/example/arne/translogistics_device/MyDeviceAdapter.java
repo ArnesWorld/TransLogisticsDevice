@@ -44,7 +44,7 @@ public class MyDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
             viewHolder.txtDeviceName.setText(device.getName());
         }
         else{viewHolder.txtDeviceName.setText("Undefined device");}
-        if(context.pairedDevices.contains(device)){
+        if(context.bluetoothAdapter.getBondedDevices().contains(device)){
             viewHolder.btnConnectSend.setText("Send");
         }
 
@@ -64,8 +64,8 @@ public class MyDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
             btnConnectSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(context.pairedDevices.contains(device)) {
-                        context.sendData();
+                    if(context.bluetoothAdapter.getBondedDevices().contains(device)) {
+                        context.sendData(device);
                     }
                     else{context.connect(device);}
 

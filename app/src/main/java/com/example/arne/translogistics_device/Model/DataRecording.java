@@ -16,8 +16,8 @@ import java.util.Date;
 
 @Entity
 @TypeConverters(DateConverter.class)
-public class DataRecording implements Serializable {
-
+public class DataRecording implements java.io.Serializable {
+    static final long serialVersionUID = 123456789123456789L;
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "rec_intervals")
