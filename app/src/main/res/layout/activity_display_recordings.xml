@@ -7,7 +7,7 @@
     tools:context="com.example.arne.translogistics_device.DisplayRecordingsActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/lblElapsedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

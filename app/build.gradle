@@ -26,8 +26,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    
-
     //Lottie Animation
     compile 'com.airbnb.android:lottie:2.5.0-rc1'
     //Google location service and maps
@@ -59,6 +57,7 @@ dependencies {
     // Java8 support for Lifecycles
     implementation "android.arch.lifecycle:common-java8:1.1.0"
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+
 
     //GSON
     compile 'com.google.code.gson:gson:2.8.2'

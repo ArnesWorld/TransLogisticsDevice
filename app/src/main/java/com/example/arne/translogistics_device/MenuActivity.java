@@ -24,7 +24,7 @@ public class MenuActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.menu_settings:
-            //    launchSettingsActivity();
+                launchSettingsActivity();
                 return true;
             case R.id.menu_new_recording:
                 launchNewRecordingActivity();
@@ -37,12 +37,12 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void launchSettingsActivity() {
-      //  Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-      //  startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
     }
 
     private void launchNewRecordingActivity() {
-        Intent intent = new Intent(getApplicationContext(), RecordDataActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ScanPackageActivity.class);
         startActivity(intent);
     }
 

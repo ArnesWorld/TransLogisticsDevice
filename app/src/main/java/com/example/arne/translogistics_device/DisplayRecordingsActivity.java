@@ -24,12 +24,12 @@ public class DisplayRecordingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_recordings);
         setTitle("Data Recordings");
         db = AppDataBase.getInstance(getApplicationContext());
-        LoadDummyData();
-
+       // LoadDummyData();
+        int highLigtId = getIntent().getIntExtra("dataRecordingId", -1);
         ArrayList<DataRecording> dataRecordings = (ArrayList<DataRecording>) db.dataRecordingModel().getAllDataRecordings();
         loadPackageObjects(dataRecordings);
         listView = findViewById(R.id.listView);
-        myDataRecAdapter = new MyDataRecAdapter(getApplicationContext(),R.layout.datarec_list_item, dataRecordings);
+        myDataRecAdapter = new MyDataRecAdapter(getApplicationContext(),R.layout.datarec_list_item, dataRecordings, highLigtId);
         listView.setAdapter(myDataRecAdapter);
     }
 

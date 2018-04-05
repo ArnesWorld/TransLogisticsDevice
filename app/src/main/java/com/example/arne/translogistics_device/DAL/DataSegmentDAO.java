@@ -35,6 +35,9 @@ public interface DataSegmentDAO{
     @Query("DELETE FROM DataSegment")
     void deleteAll();
 
+    @Query("DELETE FROM DataSegment WHERE data_recording_id = :id")
+    void deleteDataSegmentByRecordingId(int id);
+
 
 
 }

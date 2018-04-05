@@ -8,4 +8,57 @@
     <string name="btnSendData">Send Data</string>
     <string name="btnConnectSend">Connect</string>
     <string name="lblDeviceList">Device List:</string>
+    //RecordData
+    <string name="btnStartRecording">Start</string>
+    <string name="btnStopRecording">Stop</string>
+    <string name="txtElapsedTime">Elapsed Time:</string>
+    <string name="txtStartTime">Start Time:</string>
+    //preferences
+    <string name="pref_header_set_recording_intervals">Recording interval</string>
+    <string name="pref_set_recording_intervals_default">10000</string>
+    <string name="pref_record_interval_key">pref_record_interval_key</string>
+    <string name="pref_summary_set_recording_intervals">Set the time interval between each data-recording</string>
+
+    <string name="pref_header_max_shock">Max Shock</string>
+    <string name="pref_max_shock_default">3000</string>
+    <string name="pref_max_shock_key">pref_max_shock_key</string>
+    <string name="pref_summary_max_shock">Set the value for the limit that constitutes a tolerable shock</string>
+    <string name="pref_max_shock_dialog_message">1000 = Light touch \n3000 = Firm bump\n6000 = Hard jolt </string>
+    <string name="lblRecIntervals">Recording Intervals:</string>
+    <string name="lblShockLimit">Shock Limit:</string>
+
+
+    <string-array name="pref_recording_intervals_titles">
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>1 minutes</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+
+    <string-array name="pref_recording_intervals_values">
+        <item>5000</item>
+        <item>10000</item>
+        <item>60000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+        <item>180000</item>
+        <item>270000</item>
+        <item>360000</item>
+    </string-array>
+
+    //package dialog fragment
+    <string name="btnManualPackageInput">Enter Manually</string>
+    <string name="lblDescription">Description</string>
+    <string name="lblQty">Qty</string>
+    <string name="lblShipFrom">Ship From</string>
+    <string name="lblShipTo">Ship To</string>
+    <string name="lblCurrier">Currier</string>
+    <string name="lblEnterPackageInfo">Enter Package Info</string>
+
 </resources>
