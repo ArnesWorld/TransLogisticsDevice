@@ -1,5 +1,6 @@
 package com.example.arne.translogistics_device;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -29,7 +30,7 @@ public class DisplayRecordingsActivity extends AppCompatActivity {
         ArrayList<DataRecording> dataRecordings = (ArrayList<DataRecording>) db.dataRecordingModel().getAllDataRecordings();
         loadPackageObjects(dataRecordings);
         listView = findViewById(R.id.listView);
-        myDataRecAdapter = new MyDataRecAdapter(getApplicationContext(),R.layout.datarec_list_item, dataRecordings, highLigtId);
+        myDataRecAdapter = new MyDataRecAdapter(this,R.layout.datarec_list_item, dataRecordings, highLigtId);
         listView.setAdapter(myDataRecAdapter);
     }
 
@@ -38,6 +39,7 @@ public class DisplayRecordingsActivity extends AppCompatActivity {
             dr.pack = db.packageModel().getPackageById(dr.getPackageId());
         }
     }
+
 
     private void LoadDummyData() {
         db.dataSegmentModel().deleteAll();

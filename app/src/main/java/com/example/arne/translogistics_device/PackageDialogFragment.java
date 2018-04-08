@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ import com.example.arne.translogistics_device.Model.Package;
 public class PackageDialogFragment extends DialogFragment {
 
     private AppDataBase database;
-    private Button btnTest;
+    private Button btnTest, btnOk, btnCancel;
     private EditText desc;
     private EditText qty;
     private EditText company;
@@ -41,11 +42,42 @@ public class PackageDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_package_dialog, container, false);
+        database = AppDataBase.getInstance(getContext());
+        desc= view.findViewById(R.id.editTextDescription);
+        qty= view.findViewById(R.id.editTextQty);
+        company= view.findViewById(R.id.editTextCompany);
+        shipTo = view.findViewById(R.id.editTextShipTo);
+        shipFrom= view.findViewById(R.id.editTextShipFrom);
+        currier= view.findViewById(R.id.editTextCurrier);
+        btnTest = view.findViewById(R.id.btnTest);
+        btnOk = view.findViewById(R.id.btnOk);
+        btnCancel = view.findViewById(R.id.btnCancel);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadTestPackageData(view);
+
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchRecordDataActivity();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().cancel();
+            }
+        });
 
 
         return view;
     }
-
+/*
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         database = AppDataBase.getInstance(getContext());
@@ -91,7 +123,7 @@ public class PackageDialogFragment extends DialogFragment {
 
         return builder.create();
     }
-
+*/
     public void launchRecordDataActivity(){
         Intent intent = new Intent(getContext(), RecordDataActivity.class);
         String des = desc.getText().toString();

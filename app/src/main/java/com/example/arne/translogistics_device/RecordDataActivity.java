@@ -160,7 +160,7 @@ public class RecordDataActivity extends AppCompatActivity {
 
     private void startRecordingData() {
         //Get recording interval from sharedPreferences
-        recordingInterval = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_record_interval_key), ""));
+        recordingInterval = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_record_interval_key), "5000"));
         //Initialize DataRecording object
         initDataRecording();
         //Start to chronometer
@@ -270,6 +270,7 @@ public class RecordDataActivity extends AppCompatActivity {
         @Override
         protected DataSegment doInBackground(Void... voids) {
             Date timeOfRecording = Calendar.getInstance().getTime();
+            //setLastKnownLocation();
             DataSegment dataSegment = new DataSegment(timeOfRecording, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
                     shockMonitor.getMaxShock(), shockMonitor.getShocksOverLimit(), dataRecording.getId());
             database.dataSegmentModel().insertDataSegment(dataSegment);

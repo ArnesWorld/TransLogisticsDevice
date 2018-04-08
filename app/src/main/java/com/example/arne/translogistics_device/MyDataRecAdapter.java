@@ -24,13 +24,16 @@ import java.util.List;
 public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
     private ArrayList<DataRecording> dataSet;
     private int highLigtId;
+    private DisplayRecordingsActivity context;
     public MyDataRecAdapter(@NonNull Context context, int resource, List<DataRecording> objects) {
         super(context, resource, objects);
+        this.context = (DisplayRecordingsActivity) context;
         dataSet = (ArrayList<DataRecording>) objects;
     }
 
     public MyDataRecAdapter(@NonNull Context context, int resource, List<DataRecording> objects, int hightLigtId) {
         super(context, resource, objects);
+        this.context = (DisplayRecordingsActivity) context;
         dataSet = (ArrayList<DataRecording>) objects;
         this.highLigtId = hightLigtId;
     }
@@ -81,9 +84,9 @@ public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
             btnViewData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), DisplayDataActivity.class);
+                    Intent intent = new Intent(context, DisplayDataActivity.class);
                     intent.putExtra("recId", recId);
-                    getContext().startActivity(intent);
+                    context.startActivity(intent);
                 }
             });
         }
@@ -91,9 +94,9 @@ public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
             btnSendData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), SendDataActivity.class);
+                    Intent intent = new Intent(context, SendDataActivity.class);
                     intent.putExtra("datarecording", dataRecording);
-                    getContext().startActivity(intent);
+                    context.startActivity(intent);
                 }
             });
         }
