@@ -33,4 +33,7 @@ public interface DataRecordingDAO {
     @Query("DELETE FROM DataRecording")
     void deleteAll();
 
+    @Query("DELETE FROM DataRecording WHERE id = :id")
+    void deleteDataRecordingById(int id);
+
 }

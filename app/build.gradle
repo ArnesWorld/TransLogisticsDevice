@@ -60,4 +60,10 @@ dependencies {
     // Java8 support for Lifecycles
     implementation "android.arch.lifecycle:common-java8:1.1.0"
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+
+
+    //GSON
+    compile 'com.google.code.gson:gson:2.8.2'
+
+
 }

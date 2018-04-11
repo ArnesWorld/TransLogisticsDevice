@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:title="Settings">
+    <PreferenceCategory
+        android:key="pref_key_general_settings"
+        android:title="General"
+        >
+        <ListPreference
+            android:defaultValue="@string/pref_set_recording_intervals_default"
+            android:entries="@array/pref_recording_intervals_titles"
+            android:entryValues="@array/pref_recording_intervals_values"
+
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:key="@string/pref_record_interval_key"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="@string/pref_summary_set_recording_intervals"
+            android:title="@string/pref_header_set_recording_intervals" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_shockmonitoring_settings"
+        android:title="Shock Monitoring Settings"
+
+        >
+
+    </PreferenceCategory>
+    <EditTextPreference
+
+        android:defaultValue="@string/pref_max_shock_default"
+        android:dialogMessage="@string/pref_max_shock_dialog_message"
+        android:icon="@android:drawable/ic_menu_always_landscape_portrait"
+        android:key="@string/pref_max_shock_key"
+        android:summary="@string/pref_max_shock_default"
+        android:title="@string/pref_header_max_shock" />
+    <!--    <com.example.arne.shockmonitorDB.NumberPickerPreference
+            android:key="shock_limit"
+            android:title="@string/pref_header_max_shock"
+            android:summary="@string/pref_summary_max_shock"
+            android:defaultValue="55"
+            android:icon="@drawable/ic_info_black_24dp"
+            />-->
+</PreferenceScreen>

@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.example.arne.translogistics_device.ScanPackageActivity">
 
+    <Button
+        android:id="@+id/btnEnterPackageData"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="444dp"
+        android:text="@string/btnManualPackageInput"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -8,9 +8,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 
 @Entity
-public class Package {
+public class Package implements Serializable {
 
     @PrimaryKey (autoGenerate = true)
     private int id;
@@ -26,8 +28,7 @@ public class Package {
     public Package(){}
 
 
-    public Package(int id, String description, int qty, String company, String shopFrom, String shipTo, String currier) {
-        this.id = id;
+    public Package(String description, int qty, String company, String shopFrom, String shipTo, String currier) {
         this.description = description;
         this.qty = qty;
         this.company = company;

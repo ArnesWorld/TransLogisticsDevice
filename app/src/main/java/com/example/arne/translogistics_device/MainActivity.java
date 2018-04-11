@@ -15,8 +15,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
-public class MainActivity extends AppCompatActivity{
-
+public class MainActivity extends MenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

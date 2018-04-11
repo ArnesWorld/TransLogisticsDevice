@@ -31,4 +31,7 @@ public interface PackageDAO {
     @Query("DELETE FROM Package")
     void deleteAll();
 
+    @Query("DELETE FROM Package WHERE id = :id")
+    void deletePackageById(int id);
+
 }
