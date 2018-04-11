@@ -1,10 +1,20 @@
 package com.example.arne.translogistics_device;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.arne.translogistics_device.DAL.AppDataBase;
 import com.example.arne.translogistics_device.Model.DataSegment;
@@ -26,10 +36,12 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DisplayDataActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener {
 
@@ -41,30 +53,38 @@ public class DisplayDataActivity extends AppCompatActivity implements OnMapReady
     private Marker currMarker;
     private ArrayList<DataSegment> dataSegments;
     private AppDataBase db;
+    private Geocoder geoCoder;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_data);
 
+        geoCoder = new Geocoder(this, Locale.ENGLISH);
         db = AppDataBase.getInstance(getApplicationContext());
         int recId = getIntent().getIntExtra("recId", 0);
         setTitle("Display Data-Recording id: " + recId);
 
+        //Get datasegments from database
         dataSegments = (ArrayList<DataSegment>) db.dataSegmentModel().getDataSegmentByRecId(recId);
-
+        //Initialize graphs
         graphMaxShock = findViewById(R.id.graphMaxShock);
         graphShocksOverLimit = findViewById(R.id.graphShocksOverLimit);
-
+        //Initialize Data series
         BarGraphSeries<DataPoint> shocksOverLimitSeries = new BarGraphSeries<>();
         LineGraphSeries<DataPoint> maxShockValueSeries = new LineGraphSeries<>();
 
         //Make limit line
+        sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String maxShockKey = getResources().getString(R.string.pref_max_shock_key);
+        int shockLimit = Integer.parseInt(sharedPreferences.getString(maxShockKey, "1000"));
+
         LineGraphSeries<DataPoint> shockValueLimitLineSeries = new LineGraphSeries<>();
         //Load data into series from dataSegment
         for (DataSegment d : dataSegments) {
             DataPoint shocksOverLimit = new DataPoint(d.getTimeStamp(), d.getShocksOverLimit());
             DataPoint maxShock = new DataPoint(d.getTimeStamp(), d.getMaxShock());
-            DataPoint limitLine = new DataPoint(d.getTimeStamp(), 3000);
+            DataPoint limitLine = new DataPoint(d.getTimeStamp(), shockLimit);
 
             shocksOverLimitSeries.appendData(shocksOverLimit, true, 100);
             maxShockValueSeries.appendData(maxShock, true, 100);
@@ -122,6 +142,36 @@ public class DisplayDataActivity extends AppCompatActivity implements OnMapReady
         // a single polyline. Read the rest of the tutorial to learn more.
         Polyline polyline1 = googleMap.addPolyline(polylineOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates.get(0),14));
+
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(getApplicationContext());
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(getApplicationContext());
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(getApplicationContext());
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
     }
 
     private void setupTapListener(Series<DataPoint> series) {
@@ -129,17 +179,18 @@ public class DisplayDataActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
                 LatLng locationPoint = findLocationByTimeStamp(dataPoint.getX());
-                SetMarkerOnMap(locationPoint, dataPoint.getY());
+                SetMarkerOnMap(locationPoint, dataPoint.getY(), dataPoint.getX());
             }
         });
     }
 
-    private void SetMarkerOnMap(LatLng locationPoint, double yValue) {
+    private void SetMarkerOnMap(LatLng locationPoint, double yValue, double xValue) {
         if(currMarker != null){
             currMarker.remove();
         }
 
-        currMarker = map.addMarker(new MarkerOptions().position(new LatLng(locationPoint.latitude, locationPoint.longitude)).title("Value: " + yValue));
+        currMarker = map.addMarker(new MarkerOptions().position(new LatLng(locationPoint.latitude, locationPoint.longitude))
+                .title("Value: " + yValue ).snippet("Time: " + formatter.format(xValue) + "\n" + getAddressFromLocation(locationPoint)));
     }
 
     private LatLng findLocationByTimeStamp(double x) {
@@ -181,4 +232,25 @@ public class DisplayDataActivity extends AppCompatActivity implements OnMapReady
         graph.getViewport().setXAxisBoundsManual(true);
 
     }
+
+    private String getAddressFromLocation(LatLng latLng) {
+
+        Address addresse = null;
+        try {
+            addresse = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1).get(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StringBuilder mSB = new StringBuilder("Address:\n");
+        int j = addresse.getMaxAddressLineIndex();
+        if (j >= 0){
+            for (int i = 0; i <= j; i++) {
+                mSB.append(addresse.getAddressLine(i)).append("\n");
+            }
+        }
+        return mSB.toString();
+    }
+
+
 }

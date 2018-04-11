@@ -48,8 +48,6 @@ public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.datarec_list_item, parent, false);
             viewHolder = new ViewHolder(convertView);
-            viewHolder.setBtnViewDataListener(dataRecording.getId());
-            viewHolder.setBtnSendDataListener(dataRecording);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -60,6 +58,8 @@ public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
         viewHolder.txtPackageId.setText(String.valueOf(dataRecording.pack.getId()));
         viewHolder.txtRecId.setText(String.valueOf(dataRecording.getId()));
         viewHolder.txtCompany.setText(dataRecording.pack.getCompany());
+        viewHolder.setBtnViewDataListener(dataRecording.getId());
+        viewHolder.setBtnSendDataListener(dataRecording);
 
         return convertView;
     }
@@ -101,12 +101,12 @@ public class MyDataRecAdapter extends ArrayAdapter<DataRecording> {
             });
         }
     }
-
+/*
     @Nullable
     @Override
     public DataRecording getItem(int position) {
         return dataSet.get(position);
     }
-
+*/
 
 }

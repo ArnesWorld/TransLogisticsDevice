@@ -35,6 +35,7 @@ import com.example.arne.translogistics_device.Model.Package;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -95,7 +96,8 @@ public class RecordDataActivity extends AppCompatActivity {
         //Initialize monitor-objects
         shockMonitor = new ShockMonitor(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        setLastKnownLocation();
+        //setUpLocationRequest();
+         setLastKnownLocation();
         //Initialize layout-objects
         txtPackId = findViewById(R.id.txtPackIdRecData);
         txtPackId.setText(String.valueOf(packageId));
@@ -121,6 +123,37 @@ public class RecordDataActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpLocationRequest() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                lastKnownLocation = locationResult.getLastLocation();
+
+                Toast.makeText(getApplicationContext(), "New Location: " + lastKnownLocation.getLatitude() + " : " + lastKnownLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setInterval(5000);
+        //locationRequest.setSmallestDisplacement(20);
+
+        startLocationUpdates();
+    }
+    //This is done via requestLocationUpdate
+
+    private void startLocationUpdates() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(locationRequest,
+                    locationCallback, null);
+        }else {
+            String[] permissionRequest = {Manifest.permission.ACCESS_FINE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissionRequest, LOCATION_REQUEST_CODE);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -143,6 +176,7 @@ public class RecordDataActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            
             mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -214,7 +248,8 @@ public class RecordDataActivity extends AppCompatActivity {
         workAnimation.setVisibility(View.INVISIBLE);
         //it ain't running no more
         running = false;
-        
+        //stop location request
+        //mFusedLocationClient.removeLocationUpdates(locationCallback);
         startConfirmationDialog();
        // launchDisplayDataActivity();
     }
@@ -270,7 +305,7 @@ public class RecordDataActivity extends AppCompatActivity {
         @Override
         protected DataSegment doInBackground(Void... voids) {
             Date timeOfRecording = Calendar.getInstance().getTime();
-            //setLastKnownLocation();
+            setLastKnownLocation();
             DataSegment dataSegment = new DataSegment(timeOfRecording, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
                     shockMonitor.getMaxShock(), shockMonitor.getShocksOverLimit(), dataRecording.getId());
             database.dataSegmentModel().insertDataSegment(dataSegment);
@@ -312,32 +347,7 @@ public class RecordDataActivity extends AppCompatActivity {
     }
 
 
-    //This is done via requestLocationUpdate
-    /*
-    private void startLocationUpdates() {
-                locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-               lastKnownLocation = locationResult.getLastLocation();
-                //Add location-data
-                monitoringData.addLocationPoint(new LocationPoint(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude()));
-                Toast.makeText(getApplicationContext(), "New Location: " + lastKnownLocation.getLatitude() + " : " + lastKnownLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-            }
-        };
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        locationRequest.setInterval(5000);
-        startLocationUpdates();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mFusedLocationClient.requestLocationUpdates(locationRequest,
-                    locationCallback, null);
-        }else {
-            String[] permissionRequest = {Manifest.permission.ACCESS_FINE_LOCATION};
-            ActivityCompat.requestPermissions(this, permissionRequest, LOCATION_REQUEST_CODE);
-        }
-    }*/
+
 
 
 }
