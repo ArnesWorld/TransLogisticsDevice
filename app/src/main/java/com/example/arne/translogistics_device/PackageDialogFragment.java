@@ -30,6 +30,8 @@ public class PackageDialogFragment extends DialogFragment {
     private EditText shipTo;
     private EditText shipFrom;
     private EditText currier;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
