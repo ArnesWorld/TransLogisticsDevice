@@ -42,7 +42,7 @@ public class ScanPackageActivity extends AppCompatActivity {
 
     private void buildDialog(View v) {
         qrFragmnet.stopCamera();
-        PackageDialogFragment packDialog = new PackageDialogFragment(qrFragmnet);
+        PackageDialogFragment packDialog = new PackageDialogFragment();
         packDialog.show(getSupportFragmentManager(), "package");
 
     }

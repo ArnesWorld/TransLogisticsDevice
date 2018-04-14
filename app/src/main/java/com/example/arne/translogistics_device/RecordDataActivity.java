@@ -86,8 +86,6 @@ public class RecordDataActivity extends AppCompatActivity {
         //Initialize database
         database = AppDataBase.getInstance(getApplicationContext());
 
-        //*************Dummy package until we integrate**************
-        //setUpDummyPackage();
 
         sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         maxShockKey = getResources().getString(R.string.pref_max_shock_key);
@@ -96,7 +94,7 @@ public class RecordDataActivity extends AppCompatActivity {
         //Initialize monitor-objects
         shockMonitor = new ShockMonitor(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        //setUpLocationRequest();
+         setUpLocationRequest();
          setLastKnownLocation();
         //Initialize layout-objects
         txtPackId = findViewById(R.id.txtPackIdRecData);
@@ -249,7 +247,7 @@ public class RecordDataActivity extends AppCompatActivity {
         //it ain't running no more
         running = false;
         //stop location request
-        //mFusedLocationClient.removeLocationUpdates(locationCallback);
+        mFusedLocationClient.removeLocationUpdates(locationCallback);
         startConfirmationDialog();
        // launchDisplayDataActivity();
     }
@@ -305,7 +303,7 @@ public class RecordDataActivity extends AppCompatActivity {
         @Override
         protected DataSegment doInBackground(Void... voids) {
             Date timeOfRecording = Calendar.getInstance().getTime();
-            setLastKnownLocation();
+          //  setLastKnownLocation();
             DataSegment dataSegment = new DataSegment(timeOfRecording, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
                     shockMonitor.getMaxShock(), shockMonitor.getShocksOverLimit(), dataRecording.getId());
             database.dataSegmentModel().insertDataSegment(dataSegment);

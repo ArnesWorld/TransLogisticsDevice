@@ -12,7 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @TypeConverters(DateConverter.class)
@@ -33,6 +35,9 @@ public class DataRecording implements java.io.Serializable {
 
     @Ignore
     public Package pack;
+
+    @Ignore
+    public List<DataSegment> dataSegments;
 
     public DataRecording(){}
 

@@ -13,6 +13,7 @@ import com.example.arne.translogistics_device.Model.Package;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class DisplayRecordingsActivity extends AppCompatActivity {
 
@@ -39,6 +40,8 @@ public class DisplayRecordingsActivity extends AppCompatActivity {
             dr.pack = db.packageModel().getPackageById(dr.getPackageId());
         }
     }
+
+
 
 
     private void LoadDummyData() {

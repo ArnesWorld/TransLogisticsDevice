@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.arne.translogistics_device.DAL.AppDataBase;
 import com.example.arne.translogistics_device.Model.DataRecording;
 import com.google.gson.Gson;
 
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,6 +73,7 @@ public class SendDataActivity extends AppCompatActivity{
 
         dataRecording = (DataRecording) getIntent().getSerializableExtra("datarecording");
         Toast.makeText(getApplicationContext(),"Datarexcording id: " + dataRecording.getId() + "package: " + dataRecording.pack.getCompany(), Toast.LENGTH_LONG).show();
+        loadDataSegmentObjects(dataRecording);
         listViewDevices = findViewById(R.id.listViewDevices);
         btnRefresh = findViewById(R.id.btnRefresh);
         // Get bluetooth adapter
@@ -116,6 +119,13 @@ public class SendDataActivity extends AppCompatActivity{
 
         setDiscoverability();
     }
+
+    private void loadDataSegmentObjects(DataRecording dataRecording) {
+        AppDataBase db = AppDataBase.getInstance(getApplicationContext());
+        dataRecording.dataSegments = db.dataSegmentModel().getDataSegmentByRecId(dataRecording.getId());
+
+    }
+
 
     private void setDiscoverability(){
         Intent discoverableIntent =
